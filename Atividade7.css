@@ -1,0 +1,15 @@
+#fraca{
+    border: solid 1px black;
+    background-color: red;
+    color: white;
+}
+#media{
+    border: solid 1px black;
+    background-color: orange;
+    color: white;
+}
+#forte{
+    border: solid 1px black;
+    background-color: green;
+    color: white;
+}

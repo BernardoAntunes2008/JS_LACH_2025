@@ -1,28 +1,72 @@
 let botao = document.getElementById("botao");
-let texto,p,tam,ArrayDePalavra,i,j,r,ArrayDeRepeticao=[],maior, maisrecorrente = "";
-botao.onclick = function() 
+
+const Ocorrencias = (palavra) => 
 {
-    texto = document.getElementById("frase").value;
-    p = document.getElementById("paragrafo");
-    tam = texto.length;
-    ArrayDePalavra = texto.split(" ");
-        for(i=0;i<tam;i++)
+    return {palavra : palavra, ocorre: 1}
+}
+
+const ArrayDeOcorrencia = [];
+
+const VerificaOcorrencia = palavra => 
+{
+    let i, repete = false;
+    for(i=0;i<ArrayDeOcorrencia.length;i++)
+    {
+        if(ArrayDeOcorrencia[i].palavra==palavra)
         {
-            r=0;
-            for(j=0;j<tam;j++)
-            {
-                if(ArrayDePalavra[i]==ArrayDePalavra[j])r++;
-            }
-            ArrayDeRepeticao[i] = r; 
+            ArrayDeOcorrencia[i].ocorre++;
+            repete = true;
         }
-        maior=ArrayDeRepeticao[0];
-        for(i=0;i<tam;i++)
+    }
+
+    if(repete==false)
+    {
+        ArrayDeOcorrencia.push(Ocorrencias(palavra));
+    }
+
+    return ArrayDeOcorrencia;
+}
+
+const MaiorOcorrencia = () =>
+{
+    let maior = 0;
+    let posicao;
+    for(let i = 0; i<ArrayDeOcorrencia.length ; i++)
+    {
+        if(ArrayDeOcorrencia[i].ocorre>=maior)
         {
-            if(ArrayDeRepeticao[i] >= maior)maior=ArrayDeRepeticao[i];
+            maior=ArrayDeOcorrencia[i].ocorre;
+            posicao = i;
         }
-        for(i=0;i<tam;i++)
+    }
+    return posicao;
+}
+
+function Letras(texto)
+{
+    let letra = 0;
+    for(let i = 0; i<texto.length; i++)
+    {
+        for(let j = 0; j<texto[i].length; j++)
         {
-            if(ArrayDeRepeticao[i]==maior)maisrecorrente=ArrayDePalavra[i];
+            letra++;
         }
-    p.innerHTML = maisrecorrente;
+    }
+    return letra;
+}
+
+botao.onclick = function()
+{
+    let frase = document.getElementById("frase").value;
+    let paragrafo = document.getElementById("paragrafo");
+    let ArrayDePalavra = frase.split(" ");
+    let tam = ArrayDePalavra.length;
+    let letras = Letras(ArrayDePalavra);
+    for( let i = 0 ; i < tam ; i++ )
+    {
+        VerificaOcorrencia(ArrayDePalavra[i]);
+    }
+    let Mo = MaiorOcorrencia();
+    paragrafo.innerHTML = "A palavra de maior ocorrencia no texto é: "+ ArrayDeOcorrencia[Mo].palavra +". <br/> Ela ocorre "+
+    ArrayDeOcorrencia[Mo].ocorre+" vezes. <br/> O texto tem "+tam+" palavras e o total de letras é: "+letras;
 }
